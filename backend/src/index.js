@@ -1,10 +1,23 @@
-import express from 'express'
-import dotenv from "dotenv";
+import express from 'express';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.routes.js';
+
 dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT
-app.listen(PORT, ()=>{
-    console.log(`Server is running on port ${PORT}`);
-})
+app.use(express.json());
+
+// Root route
+app.get("/", (req, res) => {
+    res.send("Hello, welcome to LeetLab");
+});
+
+// Auth routes
+app.use("/api/v1/auth", authRoutes);
+
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+    console.log(`✅ Server is running on port ${PORT}`);
+});
