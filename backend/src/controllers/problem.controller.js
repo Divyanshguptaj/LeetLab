@@ -4,6 +4,7 @@ import {
   pollBatchResults,
   getJudge0LanguageId,
 } from "../libs/judge0.lib.js";
+
 export const createProblem = async (req, res) => {
   // going to all data from req body - title, desc,etc
   const {
@@ -152,6 +153,7 @@ export const getProblemById = async (req, res) => {
   }
  
 };
+
 export const updateProblem = async (req, res) => {
   //id nikalo
   const { id } = req.params;
@@ -243,6 +245,7 @@ export const updateProblem = async (req, res) => {
     });
   }
 };
+
 export const deleteProblem = async (req, res) => {
   const { id } = req.params;
   try {
@@ -262,6 +265,7 @@ export const deleteProblem = async (req, res) => {
     });
   }
 };
+
 export const getSolvedProblemsSolvedByUser = async (req, res) => {
   try {
     const problems = await db.problem.findMany({
