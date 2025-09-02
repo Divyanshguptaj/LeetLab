@@ -3,7 +3,8 @@ import { authMiddleware, checkAdmin } from "../middleware/auth.middleware.js";
 import{ createProblem,getAllProblems,getProblemById,updateProblem,deleteProblem,addtoCompanyTags,getSolvedProblemsSolvedByUser } from "../controllers/problem.controller.js" 
 const problemRoutes = express.Router();
 
-problemRoutes.post("/create-problem",authMiddleware,checkAdmin,createProblem);
+// problemRoutes.post("/create-problem",authMiddleware,checkAdmin,createProblem);
+problemRoutes.post("/create-problem", createProblem);
 problemRoutes.get("/get-all-problems",authMiddleware,getAllProblems);
 problemRoutes.get("/get-problem/:id",authMiddleware,getProblemById);
 problemRoutes.put("/update-problem/:id",authMiddleware,checkAdmin,updateProblem);    

@@ -10,11 +10,11 @@ export const getJudge0LanguageId = (language) => {
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const pollBatchResults = async (tokens) => {
   while (true) {
     //hitting end point and getting data
     const { data } = await axios.request(
-      
       {
         method: "GET",
         url: `${process.env.JUDGE0_API_URL}/submissions/batch`,
