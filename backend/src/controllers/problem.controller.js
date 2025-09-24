@@ -5,8 +5,14 @@ import {
   getJudge0LanguageId,
 } from "../libs/judge0.lib.js";
 
+// language mapping for Piston
+const languageMap = {
+  JAVASCRIPT: { language: "javascript", version: "18.15.0" },
+  PYTHON: { language: "python", version: "3.10.0" },
+  JAVA: { language: "java", version: "15.0.2" },
+};
+
 export const createProblem = async (req, res) => {
-  // going to all data from req body - title, desc,etc
   const {
     title,
     description,
@@ -19,45 +25,39 @@ export const createProblem = async (req, res) => {
     referenceSolutions,
   } = req.body;
 
-  //going to checck user role again for admin
-  // if (req.user.role !== "ADMIN") {
-  //   return req.status(403).json({
-  //     error: "You are allowed to create problem",
-  //   });
-  // }
-  const role = "ADMIN"
   try {
-    for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
-      //taking language and solution code from refernce sol
-      const languageId = getJudge0LanguageId(language);
-
-      if (!languageId) {
-        return req.status(403).json({
-          error: "Language not allowed",
-        });
+    for (const [frontendLang, solutionCode] of Object.entries(referenceSolutions)) {
+      // map frontend language (e.g., JAVASCRIPT) to piston language
+      const mapped = languageMap[frontendLang];
+      if (!mapped) {
+        return res.status(403).json({ error: `${frontendLang} not supported` });
       }
-      //loop through each reference solution for different language
 
       const submissions = testcases.map(({ input, output }) => ({
+        language: mapped.language,
+        version: mapped.version,
         source_code: solutionCode,
-        language_id: languageId,
         stdin: input,
         expected_output: output,
       }));
 
-      const submissionResults = await submitBatch(submissions);
-      const tokens = submissionResults.map((res) => res.token);
-      const results = await pollBatchResults(tokens);
+      const results = await submitBatch(submissions);
+
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
-
-        if (result.status.id !== 3) {
+        if (result.stdout.trim() !== result.expected_output.trim()) {
           return res.status(400).json({
-            error: `Testcase ${i + 1} failed for language ${language}`,
+            error: `Testcase ${i + 1} failed for language ${frontendLang}`,
+            details: {
+              expected: result.expected_output,
+              got: result.stdout,
+              stderr: result.stderr,
+            },
           });
         }
       }
     }
+
     const newProblem = await db.problem.create({
       data: {
         title,
@@ -73,25 +73,17 @@ export const createProblem = async (req, res) => {
       },
     });
 
-    if (!newProblem) {
-      return res.status(500).json({
-        error: "problem while creating problem in db",
-      });
-    }
-
     return res.status(201).json({
       message: "Problem created successfully",
       success: true,
       problem: newProblem,
     });
   } catch (error) {
-    return res.status(500).json({
-      error: "Error creating problem",
-    });
+    console.error("Error creating problem", error);
+    return res.status(500).json({ error: "Error creating problem" });
   }
-
-  //judge0 se get language id  eg 63 for js
 };
+
 
 export const getAllProblems = async (req, res) => {
   try {

@@ -1,25 +1,41 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import { db } from './libs/db.js';
 import authRoutes from './routes/auth.routes.js';
 import problemRoutes from './routes/problem.routes.js';
 
 dotenv.config();
 
 const app = express();
-
 app.use(express.json());
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
-// Root route
 app.get("/", (req, res) => {
-    res.send("Hello, welcome to LeetLab");
+  res.send("Hello, welcome to LeetLab");
 });
 
-// Auth routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/problems", problemRoutes);
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
-    console.log(`✅ Server is running on port ${PORT}`);
-});
+async function startServer() {
+  try {
+    await db.$connect();  // ✅ connect to DB
+    console.log("✅ Connected to database");
+
+    app.listen(PORT, () => {
+      console.log(`✅ Server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ Failed to connect to database", err);
+    process.exit(1);
+  }
+}
+
+startServer();

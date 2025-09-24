@@ -1,82 +1,66 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-// import HomePage from "./page/HomePage";
-// import LoginPage from "./page/LoginPage";
-import SignUpPage from "./page/SignUpPage";
-// import { useAuthStore } from "./store/useAuthStore";
-// import { Loader } from "lucide-react";
-// import Layout from "./layout/Layout";
-// import AdminRoute from "./components/AdminRoute";
-// import AddProblem from "./page/AddProblem";
-// import ProblemPage from "./page/ProblemPage";
-// import Profile from "./page/Profile";
-// import Submissions from "./page/Submissions";
-// import About from "./components/About";
-// import Faq from "./components/Faq";
-// import PrivacyPolicy from "./components/PrivacyPolicy";
-// import Contact from "./components/Contact";
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+import ProblemsPage from "./pages/ProblemsPage";
+import ProblemPage from "./pages/ProblemPage";
+
+import useAuthStore from "./store/authStore";
+import LoadingSpinner from "./components/LoadingSpinner";
+import useProblemStore from "./store/problemStore";
+import CreatePlaylist from "./pages/CreatePlaylist";
+import ViewPlaylist from "./pages/ViewPlaylist";
+import CreateProblem from "./components/CreateProblem";
+import Navbar from "./components/Navbar";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, check, isCheckingAuth } = useAuthStore();
+  const { isProblemLoading } = useProblemStore();
 
-  // useEffect(() => {
-  //   checkAuth();
-  // }, [checkAuth]);
+  useEffect(() => {
+    check();
+  }, [check]);
 
-  // if (isCheckingAuth && !authUser) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <Loader className="size-10 animate-spin" />
-  //     </div>
-  //   );
-  // }
+  if (isCheckingAuth) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <div className="flex flex-col items-center justify-start">
+    <div>
       <Toaster />
+      <Navbar />
       <Routes>
-        {/* <Route path="/" element={<Layout />}>
-          <Route
-            index
-            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
-          />
-        </Route> */}
+        <Route
+          path="/"
+          element={authUser ? <Navigate to="/problems" /> : <HomePage />}
+        />
 
-        {/* <Route
+        <Route
           path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
-        /> */}
-
+          element={!authUser ? <LoginPage /> : <Navigate to={"/problems"} />}
+        />
         <Route
           path="/signup"
-          element={<SignUpPage/>}
-          // element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
+          element={!authUser ? <SignUpPage /> : <Navigate to={"/problems"} />}
         />
-        {/* <Route
-          path="/problem/:id"
-          element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
-        /> */}
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/createPlaylist" element={<CreatePlaylist />} />
+        <Route path="/viewPlaylist" element={<ViewPlaylist />} />
+        <Route path="/createProblem" element={<CreateProblem />} />
 
-        {/* <Route element={<AdminRoute />}>
-          <Route
-            path="/add-problem"
-            element={authUser ? <AddProblem /> : <Navigate to="/" />}
-          />
-        </Route> */}
-        {/* <Route
-          path="/profile"
-          element={authUser ? <Profile /> : <Navigate to="/login" />}
-        />
         <Route
-          path="/submissions"
-          element={authUser ? <Submissions /> : <Navigate to="/login" />}
+          path="/problems"
+          element={authUser ? <ProblemsPage /> : <Navigate to={"/"} />}
         />
-        <Route path="/about" element={<About />} />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/contact" element={<Contact />} /> */}
+
+        <Route
+          path="/problem/:id"
+          element={isProblemLoading ? <LoadingSpinner /> : <ProblemPage />}
+        />
       </Routes>
     </div>
   );

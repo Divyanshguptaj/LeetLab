@@ -1,152 +1,101 @@
-import React, { useState, useEffect,useRef } from "react";
-import { User, Code, LogOut, Folder, Search, Sun, Moon,Trophy,Flame } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore";
-import { Link } from "react-router-dom";
-import LogoutButton from "./LogoutButton";
-import { useProblemStore } from "../store/useProblemStore";
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+
+import { useLocation } from 'react-router-dom';
+
+
 
 const Navbar = () => {
-  const { authUser } = useAuthStore();
-  const [darkMode, setDarkMode] = useState(true);
-  const [dailyChallenge, setDailyChallenge] = useState(null);
-  const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
+  const navigate = useNavigate();
+  const { logout, authUser } = useAuthStore();
 
-  useEffect(() => {
-    if (authUser && problems.length === 0) {
-      getAllProblems();
-    }
-  }, [authUser, getAllProblems, problems.length]);  
+  const handleLogout = async () => {
+    await logout();
+    // Optional: navigate to login page after logout
+    navigate('/'); 
+  }
 
-  const randomChallengeRef = useRef(null);
-  useEffect(() => {
-    if (authUser && problems.length > 0 && !randomChallengeRef.current) {
-      const random = problems[Math.floor(Math.random() * problems.length)];
-     
-      randomChallengeRef.current = {
-        title: random.title,
-        link: `/problem/${random.id}`,
-      };
-      setDailyChallenge(randomChallengeRef.current);
-      
-    }
-  }, [authUser, problems]);
-  
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.setAttribute(
-      "data-theme",
-      darkMode ? "light" : "dark"
-    );
+  const handleSignup = () => {
+    navigate('/signup');
   };
 
-  return (
-    <nav className="sticky top-0 z-30 bg-primary/20 w-full">
-      <div className="flex w-full justify-between items-center px-6 py-3 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10 rounded-xl">
-        {/* Logo Section */}
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src="/leetlab.svg"
-            className="h-14 w-14 bg-primary/20 rounded-full p-2"
-          />
-          <span className="text-lg bg-primary/20 shadow-md rounded-2xl px-2 py-1 text-white md:text-2xl font-bold tracking-tight hidden md:block">
-            LeetLab
-          </span>
-        </Link>
+  const handleLogin = () => {
+    navigate('/login');
+  };
 
-        {/* Daily Challenge */}
-        {dailyChallenge && (
-          <div className="hidden md:flex items-center gap-2 bg-primary/30 text-white px-4 py-2 rounded-lg shadow-md">
-            <Trophy className="w-5 h-5 text-yellow-400" />
-            <p className="text-sm font-semibold">Daily Challenge:</p>
-            <Link
-              to={dailyChallenge.link}
-              className="text-white font-bold hover:underline"
+
+const location = useLocation();
+const currentPath = location.pathname;
+
+
+  return (
+    <nav className="bg-gray-800 text-gray-100 shadow-lg px-16 py-4 flex justify-between w-screen items-center z-20 relative">
+      {/* Logo/Brand */}
+      <div className="flex items-center">
+        <Link to={'/'} className="text-3xl font-extrabold text-blue-400 hover:text-blue-300 transition-colors duration-200">
+          LeetLab
+        </Link>
+      </div>
+
+      {/* Navigation Buttons / User Dropdown */}
+      <div className="flex items-center gap-4">
+        {!authUser ? (
+          <>
+            <button
+              onClick={handleSignup}
+              className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-md font-semibold"
             >
-              {dailyChallenge.title}
-            </Link>
+              Sign Up
+            </button>
+            <button
+              onClick={handleLogin}
+              className="px-5 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors duration-200 shadow-md font-semibold border border-gray-600"
+            >
+              Login
+            </button>
+          </>
+        ) : (
+          <div className="relative group"> 
+            <button className="flex items-center space-x-2 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-500 shadow-md">
+                <img
+                  alt="User Avatar"
+                  src={`https://avatar.iran.liara.run/public/boy?username=${authUser.email}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </button>
+
+          
+            <ul className="absolute right-0 mt-3 w-52 bg-gray-700 rounded-lg shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-focus-within:opacity-100 group-hover:visible group-focus-within:visible transform translate-y-2 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-300 z-50">
+              {
+      currentPath!=="/profile" &&
+             ( 
+             <li>
+                <Link to={'/profile'} className="block px-4 py-3 text-gray-200 hover:bg-gray-600 hover:text-white transition-colors duration-200">
+                  Profile
+                </Link>
+              </li>
+              ) 
+              }
+              {
+       authUser.role ==="ADMIN"?
+            ( <li>
+                <Link to={'/createProblem'} className="block px-4 py-3 text-gray-200 hover:bg-gray-600 hover:text-white transition-colors duration-200">
+                  Create Problem
+                </Link>
+              </li>)
+              : ""
+              }
+              <li>
+                <button onClick={handleLogout} className="block w-full text-left px-4 py-3 text-red-400 hover:bg-gray-600 hover:text-red-300 transition-colors duration-200">
+                  Logout
+                </button>
+              </li>
+            </ul>
           </div>
         )}
-
-        {/* Actions & User Dropdown */}
-        <div className="flex items-center gap-6">
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={toggleDarkMode}
-            className="btn btn-circle btn-ghost hover:bg-primary/20"
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5 border-white-400" />
-            ) : (
-              <Moon className="w-5 h-5 bg-amber-400-300" />
-            )}
-          </button>
-
-          {/* User Profile Dropdown */}
-          <div className="flex items-center gap-8">
-            <div className="dropdown dropdown-end">
-              <label
-                tabIndex={0}
-                className="btn btn-ghost btn-circle avatar flex flex-row "
-              >
-                <div className="w-10 rounded-full ">
-                  <img
-                    src={
-                      authUser?.image ||
-                      "https://avatar.iran.liara.run/public/boy"
-                    }
-                    alt="User Avatar"
-                    className="object-cover"
-                  />
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 space-y-3"
-              >
-                <li>
-                  <p className="text-base font-semibold">{authUser?.name}</p>
-                  <hr className="border-gray-200/10" />
-                </li>
-                <li>
-                  <Link
-                    to="/profile"
-                    className="hover:bg-primary hover:text-white text-base font-semibold"
-                  >
-                    <User className="w-4 h-4 mr-2" />
-                    My Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/submissions"
-                    className="hover:bg-primary hover:text-white text-base font-semibold"
-                  >
-                    <Folder className="w-4 h-4 mr-2" />
-                    Submissions
-                  </Link>
-                </li>
-                {authUser?.role === "ADMIN" && (
-                  <li>
-                    <Link
-                      to="/add-problem"
-                      className="hover:bg-primary hover:text-white text-base font-semibold"
-                    >
-                      <Code className="w-4 h-4 mr-1 pr-1" />
-                      Add Problem
-                    </Link>
-                  </li>
-                )}
-                <li>
-                  <LogoutButton className="hover:bg-primary hover:text-white">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Logout
-                  </LogoutButton>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </nav>
   );
