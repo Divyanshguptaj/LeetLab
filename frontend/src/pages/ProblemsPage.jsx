@@ -11,7 +11,6 @@ const ProblemsPage = () => {
 
   return (
     <div className='min-h-screen w-screen bg-gray-900 text-gray-100'>
-      <Navbar />
 
       <div className='flex flex-col md:flex-row items-center justify-center mt-12 mb-8 px-4 gap-4'>
         {/* Search Bar */}

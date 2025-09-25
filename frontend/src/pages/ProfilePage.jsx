@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useAuthStore from '../store/authStore.js';
 import useProblemStore from '../store/problemStore.js';
-import Navbar from '../components/Navbar.jsx'
 import {Link} from 'react-router-dom'
 
 const ProfilePage = () => {
@@ -11,10 +10,6 @@ const ProfilePage = () => {
   const [easy, setEasy] = useState(0);
   const [medium, setMedium] = useState(0);
   const [hard, setHard] = useState(0);
-
-  
-  
-  
   
   useEffect(() => {
     getSolvedProblemByUser();
@@ -45,13 +40,10 @@ const ProfilePage = () => {
   }, [solvedProblems]);
 
 
-
-
   return (
 <div className='flex flex-col min-h-screen w-screen bg-base-200'>
       {/* Navbar section, sticky at the top */}
       <div className='w-full sticky top-0 z-50'>
-        <Navbar/>
       </div>
     <div className='min-h-screen  w-full flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8 bg-base-200'>
 

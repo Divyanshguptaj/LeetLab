@@ -4,6 +4,6 @@ import { register, login, logout, check } from '../controllers/auth.controller.j
 authRoutes.post("/register", register);
 authRoutes.post("/login", login);
 authRoutes.post("/logout", logout);
-authRoutes.post("/check", check);
+authRoutes.get("/check", check);
 
 export default authRoutes
