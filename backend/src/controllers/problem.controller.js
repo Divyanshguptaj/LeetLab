@@ -4,7 +4,6 @@ import {
   pollBatchResults,
   getJudge0LanguageId,
 } from "../libs/judge0.lib.js";
-
 // language mapping for Piston
 const languageMap = {
   JAVASCRIPT: { language: "javascript", version: "18.15.0" },

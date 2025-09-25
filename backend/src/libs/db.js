@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../generated/prisma/index.js"; // since you used custom output
+import { PrismaClient } from "../generated/prisma/index.js"; // since you used custom output
 
 const globalForPrisma = globalThis;
 

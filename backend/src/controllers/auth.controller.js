@@ -47,7 +47,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res) => { 
   const { email, password } = req.body;
   try {
     const user = await db.user.findUnique({
@@ -69,17 +69,17 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-    console.log(token);
+    // console.log(token);
     res.cookie("token", token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV !== "development",
-      secure: false,
-      // sameSite: "lax",
+      secure: false, // true in prod, false in dev
+      sameSite: "lax", // 👈 important for cross-site cookies
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-    console.log("a gya");
     
-    console.log('Set-Cookie header:', res.getHeader('Set-Cookie'));
+    // console.log("a gya");
+    
+    // console.log('Set-Cookie header:', res.getHeader('Set-Cookie'));
     
     // console.log(token);
     res.status(201).json({
@@ -120,7 +120,7 @@ export const logout = async (req, res) => {
 export const check = async (req, res) => {
   try {
     const token = req.cookies.token;
-    console.log(token);
+    // console.log(token);
     if (!token) {
       return res
         .status(401)
@@ -128,7 +128,7 @@ export const check = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
+    // console.log(decoded);
     
     const user = await db.user.findUnique({
       where: {
@@ -142,7 +142,7 @@ export const check = async (req, res) => {
         image: true,
       },
     });
-    console.log(user);
+    // console.log(user);
     
     if (!user) {
       return res

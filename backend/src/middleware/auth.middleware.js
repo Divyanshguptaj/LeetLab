@@ -3,7 +3,8 @@ import { db } from "../libs/db.js";
 export const authMiddleware = async (req, res, next) => {
   try {
     const token = req.cookies.token;
-
+    // console.log(token);
+    
     if (!token) {
       return res
         .status(401)
@@ -12,7 +13,7 @@ export const authMiddleware = async (req, res, next) => {
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+      // console.log("dd", decoded);
     } catch (error) {
       return res
         .status(401)
