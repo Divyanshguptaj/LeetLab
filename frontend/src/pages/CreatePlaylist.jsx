@@ -3,31 +3,32 @@ import useProblemStore from '../store/problemStore.js';
 import usePlaylistStore from '../store/playlistStore.js';
 import toast from 'react-hot-toast';
 import axiosInstance from '../utils/axios.js';
-import  {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const CreatePlaylist = () => {
   const { problems, getAllProblems } = useProblemStore();
   const [playlistName, setPlaylistName] = useState('');
   const [playlistDescription, setPlaylistDescription] = useState('');
-  const [selectedProblems, setSelectedProblems] = useState(new Set()); 
+  const [selectedProblems, setSelectedProblems] = useState(new Set());
 
-  const {isCreatingPlaylist,createPlaylist} = usePlaylistStore();
- 
+  const { isCreatingPlaylist, createPlaylist } = usePlaylistStore();
+
   useEffect(() => {
     getAllProblems();
-  }, [getAllProblems]); 
+  }, [getAllProblems]);
 
-  const addProblemToPlaylist  = async(problemIds, playlistId)=>{
-           try {
-        const res = await axiosInstance.post(`/playlist/add-problem/${playlistId}`,{problemIds});
-        toast.success(res.data.message);
-           } catch (error) {
-            console.log("Error adding problem to playlist",error);
-            toast.error("Error adding problem to playlist");
-           }
+  const addProblemToPlaylist = async (problemIds, playlistId) => {
+    try {
+      // console.log("here i am ");
+      const res = await axiosInstance.post(`/playlist/add-problem/${playlistId}`, { problemIds });
+      toast.success(res.data.message);
+    } catch (error) {
+      // console.log("Error adding problem to playlist", error);
+      toast.error("Error adding problem to playlist");
+    }
   }
 
-  
+
   const handleProblemToggle = (problemId) => {
     setSelectedProblems((prevSelected) => {
       const newSelected = new Set(prevSelected);
@@ -42,27 +43,25 @@ const CreatePlaylist = () => {
 
   const navigate = useNavigate();
 
- 
-  const handleCreatePlaylist = async() => {
-    console.log('Playlist Name:', playlistName);
-    console.log('Playlist Description:', playlistDescription);
-    console.log('Selected Problems IDs:', Array.from(selectedProblems));
-    
 
-     try {
- const createdPlaylist  = await createPlaylist(playlistName, playlistDescription); 
-    if(createdPlaylist && createdPlaylist.id) {
-      await addProblemToPlaylist(Array.from(selectedProblems),createdPlaylist.id);
-      setPlaylistName("");
-      setPlaylistDescription("");
-      setSelectedProblems(new Set())
-      navigate('/viewPlaylist')
-    } else {
-      toast.error("Playlist creation failed, cannot add problems.");
+  const handleCreatePlaylist = async () => {
+    try {
+      const createdPlaylist = await createPlaylist(playlistName, playlistDescription);
+      // console.log("a gaya response", createdPlaylist.id);
+      
+      if (createdPlaylist && createdPlaylist.id) {
+        await addProblemToPlaylist(Array.from(selectedProblems), createdPlaylist.id);
+        setPlaylistName("");
+        setPlaylistDescription("");
+        setSelectedProblems(new Set())
+        navigate('/viewPlaylist')
+      } else {
+        toast.error("Playlist creation failed, cannot add problems.");
+      }
+    } catch (error) {
+      // console.error("Error in creating playlist and adding problems:", error);
+      toast.error("Error creating playlist!");
     }
-  } catch (error) {
-    console.error("Error in creating playlist and adding problems:", error);
-  }
 
 
   };
@@ -122,18 +121,17 @@ const CreatePlaylist = () => {
                 <div
                   key={problem.id}
                   className={`flex items-center justify-between p-4 mb-3 rounded-lg cursor-pointer transition-all duration-200
-                  ${
-                    selectedProblems.has(problem.id)
-                      ? 'bg-primary/20 hover:bg-primary/30 ring-2 ring-primary' 
-                      : 'bg-base-200 hover:bg-base-300' 
-                  }`}
-                  onClick={() => handleProblemToggle(problem.id)} 
+                  ${selectedProblems.has(problem.id)
+                      ? 'bg-primary/20 hover:bg-primary/30 ring-2 ring-primary'
+                      : 'bg-base-200 hover:bg-base-300'
+                    }`}
+                  onClick={() => handleProblemToggle(problem.id)}
                 >
                   <div className='flex items-center gap-4 flex-grow mr-4'>
                     <input
                       type='checkbox'
                       checked={selectedProblems.has(problem.id)}
-                      onChange={() => handleProblemToggle(problem.id)} 
+                      onChange={() => handleProblemToggle(problem.id)}
                       className='checkbox checkbox-primary'
                     />
                     <div>
@@ -142,13 +140,12 @@ const CreatePlaylist = () => {
                     </div>
                   </div>
                   <div
-                    className={`badge badge-lg ${
-                      problem.difficulty === 'EASY'
+                    className={`badge badge-lg ${problem.difficulty === 'EASY'
                         ? 'badge-success'
                         : problem.difficulty === 'MEDIUM'
-                        ? 'badge-warning'
-                        : 'badge-error'
-                    }`}
+                          ? 'badge-warning'
+                          : 'badge-error'
+                      }`}
                   >
                     {problem.difficulty}
                   </div>
@@ -166,12 +163,12 @@ const CreatePlaylist = () => {
       {/* Create Playlist Button */}
       <div className='w-full max-w-3xl text-center mt-6'>
         <button className='btn btn-primary btn-lg w-full max-w-xs transition-transform transform hover:scale-105' onClick={handleCreatePlaylist}>
-            {
-                isCreatingPlaylist ? (
-                    <span className="loading loading-spinner loading-md text-primary"></span>
-                ) : 'Create Playlist'
-            }
-         
+          {
+            isCreatingPlaylist ? (
+              <span className="loading loading-spinner loading-md text-primary"></span>
+            ) : 'Create Playlist'
+          }
+
         </button>
       </div>
     </div>

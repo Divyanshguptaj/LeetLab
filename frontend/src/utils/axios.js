@@ -10,9 +10,10 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // 👈 this is required for cookies
 });
 
-// ✅ Attach token automatically if available
+// ✅ Attach token automatically if available (for non-cookie auth)
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {

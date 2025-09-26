@@ -35,11 +35,8 @@ const useAuthStore = create((set) => ({
       set({ isLoggingIn: true });
       const res = await axiosInstance.post("/auth/login", data);
 
-      const { user, token } = res.data;
-      console.log(user, token);
-      console.log(document.cookie);
-      
-      // localStorage.setItem("token", token); // ✅ save token
+      const { user } = res.data;
+
       set({ authUser: user });
 
       toast.success(res.data.message);
@@ -65,11 +62,8 @@ const useAuthStore = create((set) => ({
   
   check: async () => {
     try {
-      // console.log(localStorage.getItem(token));
       set({ isCheckingAuth: true });
       const res = await axiosInstance.get("/auth/check");
-      console.log("here i am inside check");
-      console.log(res.data);
       set({ authUser: res.data.user });
     } catch (error) {
       set({ authUser: null });

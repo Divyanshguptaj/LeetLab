@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
 import Table from '../components/Table';
 
 
@@ -12,7 +11,7 @@ const ProblemsPage = () => {
   return (
     <div className='min-h-screen w-screen bg-gray-900 text-gray-100'>
 
-      <div className='flex flex-col md:flex-row items-center justify-center mt-12 mb-8 px-4 gap-4'>
+      <div className='flex flex-col md:flex-row items-center justify-center pt-12 mb-8 px-4 gap-4'>
         {/* Search Bar */}
         <div className='relative flex items-center w-full max-w-md bg-gray-800 rounded-lg shadow-lg border border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition-all duration-300'>
           <svg className="h-6 w-6 text-gray-400 ml-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
