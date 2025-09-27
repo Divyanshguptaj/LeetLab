@@ -4,8 +4,8 @@ import express from "express";
 
 const submissionRoutes= express.Router();
 
-submissionRoutes.get("/get-all-submissions",authMiddleware,getAllSubmissionsforaUser); // replaced getAllSubmissions
-submissionRoutes.get("/get-submissions/:problemId",authMiddleware,getallSubmissionForProblembyUser) //replaced getSubmissionsForProblem 
-submissionRoutes.get("/get-submissions-count/:problemId",authMiddleware, getTheSubmissionsCountForProblem) //replaced with getAllTheSubmissionsForProblem 
+submissionRoutes.get("/getAllSubmissions",authMiddleware,getAllSubmissionsforaUser); // replaced getAllSubmissions
+submissionRoutes.get("/getSubmission/:problemId",authMiddleware,getallSubmissionForProblembyUser) //replaced getSubmissionsForProblem 
+submissionRoutes.get("/getSubmissionCount/:problemId",authMiddleware, getTheSubmissionsCountForProblem) //replaced with getAllTheSubmissionsForProblem 
 
 export default submissionRoutes;

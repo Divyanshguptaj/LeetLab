@@ -31,7 +31,7 @@ const useProblemStore = create((set)=>({
             set({isProblemLoading:true})
             const res = await axiosInstance.get(`/problems/get-problem/${id}`)
             set({problem:res.data.problem})
-            toast.success(res.data.message)
+            // toast.success(res.data.message)
         } catch (error) {
             console.log("Error loading problemById",error);
             toast.error("Error loading problemById");

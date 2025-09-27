@@ -4062,14 +4062,27 @@ export namespace Prisma {
 
   export type AggregateSubmission = {
     _count: SubmissionCountAggregateOutputType | null
+    _avg: SubmissionAvgAggregateOutputType | null
+    _sum: SubmissionSumAggregateOutputType | null
     _min: SubmissionMinAggregateOutputType | null
     _max: SubmissionMaxAggregateOutputType | null
+  }
+
+  export type SubmissionAvgAggregateOutputType = {
+    testsPassed: number | null
+    totalTests: number | null
+  }
+
+  export type SubmissionSumAggregateOutputType = {
+    testsPassed: number | null
+    totalTests: number | null
   }
 
   export type SubmissionMinAggregateOutputType = {
     id: string | null
     userId: string | null
     problemId: string | null
+    sourceCode: string | null
     language: string | null
     stdin: string | null
     stdout: string | null
@@ -4078,6 +4091,8 @@ export namespace Prisma {
     status: string | null
     memory: string | null
     time: string | null
+    testsPassed: number | null
+    totalTests: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4086,6 +4101,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     problemId: string | null
+    sourceCode: string | null
     language: string | null
     stdin: string | null
     stdout: string | null
@@ -4094,6 +4110,8 @@ export namespace Prisma {
     status: string | null
     memory: string | null
     time: string | null
+    testsPassed: number | null
+    totalTests: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4111,16 +4129,29 @@ export namespace Prisma {
     status: number
     memory: number
     time: number
+    testsPassed: number
+    totalTests: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
+  export type SubmissionAvgAggregateInputType = {
+    testsPassed?: true
+    totalTests?: true
+  }
+
+  export type SubmissionSumAggregateInputType = {
+    testsPassed?: true
+    totalTests?: true
+  }
+
   export type SubmissionMinAggregateInputType = {
     id?: true
     userId?: true
     problemId?: true
+    sourceCode?: true
     language?: true
     stdin?: true
     stdout?: true
@@ -4129,6 +4160,8 @@ export namespace Prisma {
     status?: true
     memory?: true
     time?: true
+    testsPassed?: true
+    totalTests?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4137,6 +4170,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     problemId?: true
+    sourceCode?: true
     language?: true
     stdin?: true
     stdout?: true
@@ -4145,6 +4179,8 @@ export namespace Prisma {
     status?: true
     memory?: true
     time?: true
+    testsPassed?: true
+    totalTests?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4162,6 +4198,8 @@ export namespace Prisma {
     status?: true
     memory?: true
     time?: true
+    testsPassed?: true
+    totalTests?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4205,6 +4243,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SubmissionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubmissionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SubmissionMinAggregateInputType
@@ -4235,6 +4285,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SubmissionCountAggregateInputType | true
+    _avg?: SubmissionAvgAggregateInputType
+    _sum?: SubmissionSumAggregateInputType
     _min?: SubmissionMinAggregateInputType
     _max?: SubmissionMaxAggregateInputType
   }
@@ -4243,7 +4295,7 @@ export namespace Prisma {
     id: string
     userId: string
     problemId: string
-    sourceCode: JsonValue
+    sourceCode: string
     language: string
     stdin: string | null
     stdout: string | null
@@ -4252,9 +4304,13 @@ export namespace Prisma {
     status: string
     memory: string | null
     time: string | null
+    testsPassed: number | null
+    totalTests: number | null
     createdAt: Date
     updatedAt: Date
     _count: SubmissionCountAggregateOutputType | null
+    _avg: SubmissionAvgAggregateOutputType | null
+    _sum: SubmissionSumAggregateOutputType | null
     _min: SubmissionMinAggregateOutputType | null
     _max: SubmissionMaxAggregateOutputType | null
   }
@@ -4286,6 +4342,8 @@ export namespace Prisma {
     status?: boolean
     memory?: boolean
     time?: boolean
+    testsPassed?: boolean
+    totalTests?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4307,6 +4365,8 @@ export namespace Prisma {
     status?: boolean
     memory?: boolean
     time?: boolean
+    testsPassed?: boolean
+    totalTests?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4326,6 +4386,8 @@ export namespace Prisma {
     status?: boolean
     memory?: boolean
     time?: boolean
+    testsPassed?: boolean
+    totalTests?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4345,11 +4407,13 @@ export namespace Prisma {
     status?: boolean
     memory?: boolean
     time?: boolean
+    testsPassed?: boolean
+    totalTests?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "problemId" | "sourceCode" | "language" | "stdin" | "stdout" | "stderr" | "compileOutput" | "status" | "memory" | "time" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
+  export type SubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "problemId" | "sourceCode" | "language" | "stdin" | "stdout" | "stderr" | "compileOutput" | "status" | "memory" | "time" | "testsPassed" | "totalTests" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
   export type SubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     problem?: boolean | ProblemDefaultArgs<ExtArgs>
@@ -4376,7 +4440,7 @@ export namespace Prisma {
       id: string
       userId: string
       problemId: string
-      sourceCode: Prisma.JsonValue
+      sourceCode: string
       language: string
       stdin: string | null
       stdout: string | null
@@ -4385,6 +4449,8 @@ export namespace Prisma {
       status: string
       memory: string | null
       time: string | null
+      testsPassed: number | null
+      totalTests: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["submission"]>
@@ -4816,7 +4882,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Submission", 'String'>
     readonly userId: FieldRef<"Submission", 'String'>
     readonly problemId: FieldRef<"Submission", 'String'>
-    readonly sourceCode: FieldRef<"Submission", 'Json'>
+    readonly sourceCode: FieldRef<"Submission", 'String'>
     readonly language: FieldRef<"Submission", 'String'>
     readonly stdin: FieldRef<"Submission", 'String'>
     readonly stdout: FieldRef<"Submission", 'String'>
@@ -4825,6 +4891,8 @@ export namespace Prisma {
     readonly status: FieldRef<"Submission", 'String'>
     readonly memory: FieldRef<"Submission", 'String'>
     readonly time: FieldRef<"Submission", 'String'>
+    readonly testsPassed: FieldRef<"Submission", 'Int'>
+    readonly totalTests: FieldRef<"Submission", 'Int'>
     readonly createdAt: FieldRef<"Submission", 'DateTime'>
     readonly updatedAt: FieldRef<"Submission", 'DateTime'>
   }
@@ -5279,10 +5347,12 @@ export namespace Prisma {
 
   export type TestCaseResultAvgAggregateOutputType = {
     testCase: number | null
+    exitCode: number | null
   }
 
   export type TestCaseResultSumAggregateOutputType = {
     testCase: number | null
+    exitCode: number | null
   }
 
   export type TestCaseResultMinAggregateOutputType = {
@@ -5290,15 +5360,18 @@ export namespace Prisma {
     submissionId: string | null
     testCase: number | null
     passed: boolean | null
+    stdin: string | null
     stdout: string | null
     expected: string | null
     stderr: string | null
     compileOutput: string | null
     status: string | null
+    errorType: string | null
+    enhancedError: string | null
     memory: string | null
     time: string | null
+    exitCode: number | null
     createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type TestCaseResultMaxAggregateOutputType = {
@@ -5306,15 +5379,18 @@ export namespace Prisma {
     submissionId: string | null
     testCase: number | null
     passed: boolean | null
+    stdin: string | null
     stdout: string | null
     expected: string | null
     stderr: string | null
     compileOutput: string | null
     status: string | null
+    errorType: string | null
+    enhancedError: string | null
     memory: string | null
     time: string | null
+    exitCode: number | null
     createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type TestCaseResultCountAggregateOutputType = {
@@ -5322,25 +5398,30 @@ export namespace Prisma {
     submissionId: number
     testCase: number
     passed: number
+    stdin: number
     stdout: number
     expected: number
     stderr: number
     compileOutput: number
     status: number
+    errorType: number
+    enhancedError: number
     memory: number
     time: number
+    exitCode: number
     createdAt: number
-    updatedAt: number
     _all: number
   }
 
 
   export type TestCaseResultAvgAggregateInputType = {
     testCase?: true
+    exitCode?: true
   }
 
   export type TestCaseResultSumAggregateInputType = {
     testCase?: true
+    exitCode?: true
   }
 
   export type TestCaseResultMinAggregateInputType = {
@@ -5348,15 +5429,18 @@ export namespace Prisma {
     submissionId?: true
     testCase?: true
     passed?: true
+    stdin?: true
     stdout?: true
     expected?: true
     stderr?: true
     compileOutput?: true
     status?: true
+    errorType?: true
+    enhancedError?: true
     memory?: true
     time?: true
+    exitCode?: true
     createdAt?: true
-    updatedAt?: true
   }
 
   export type TestCaseResultMaxAggregateInputType = {
@@ -5364,15 +5448,18 @@ export namespace Prisma {
     submissionId?: true
     testCase?: true
     passed?: true
+    stdin?: true
     stdout?: true
     expected?: true
     stderr?: true
     compileOutput?: true
     status?: true
+    errorType?: true
+    enhancedError?: true
     memory?: true
     time?: true
+    exitCode?: true
     createdAt?: true
-    updatedAt?: true
   }
 
   export type TestCaseResultCountAggregateInputType = {
@@ -5380,15 +5467,18 @@ export namespace Prisma {
     submissionId?: true
     testCase?: true
     passed?: true
+    stdin?: true
     stdout?: true
     expected?: true
     stderr?: true
     compileOutput?: true
     status?: true
+    errorType?: true
+    enhancedError?: true
     memory?: true
     time?: true
+    exitCode?: true
     createdAt?: true
-    updatedAt?: true
     _all?: true
   }
 
@@ -5483,15 +5573,18 @@ export namespace Prisma {
     submissionId: string
     testCase: number
     passed: boolean
+    stdin: string | null
     stdout: string | null
     expected: string | null
     stderr: string | null
     compileOutput: string | null
     status: string
+    errorType: string | null
+    enhancedError: string | null
     memory: string | null
     time: string | null
+    exitCode: number | null
     createdAt: Date
-    updatedAt: Date
     _count: TestCaseResultCountAggregateOutputType | null
     _avg: TestCaseResultAvgAggregateOutputType | null
     _sum: TestCaseResultSumAggregateOutputType | null
@@ -5518,15 +5611,18 @@ export namespace Prisma {
     submissionId?: boolean
     testCase?: boolean
     passed?: boolean
+    stdin?: boolean
     stdout?: boolean
     expected?: boolean
     stderr?: boolean
     compileOutput?: boolean
     status?: boolean
+    errorType?: boolean
+    enhancedError?: boolean
     memory?: boolean
     time?: boolean
+    exitCode?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
     submission?: boolean | SubmissionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testCaseResult"]>
 
@@ -5535,15 +5631,18 @@ export namespace Prisma {
     submissionId?: boolean
     testCase?: boolean
     passed?: boolean
+    stdin?: boolean
     stdout?: boolean
     expected?: boolean
     stderr?: boolean
     compileOutput?: boolean
     status?: boolean
+    errorType?: boolean
+    enhancedError?: boolean
     memory?: boolean
     time?: boolean
+    exitCode?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
     submission?: boolean | SubmissionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testCaseResult"]>
 
@@ -5552,15 +5651,18 @@ export namespace Prisma {
     submissionId?: boolean
     testCase?: boolean
     passed?: boolean
+    stdin?: boolean
     stdout?: boolean
     expected?: boolean
     stderr?: boolean
     compileOutput?: boolean
     status?: boolean
+    errorType?: boolean
+    enhancedError?: boolean
     memory?: boolean
     time?: boolean
+    exitCode?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
     submission?: boolean | SubmissionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testCaseResult"]>
 
@@ -5569,18 +5671,21 @@ export namespace Prisma {
     submissionId?: boolean
     testCase?: boolean
     passed?: boolean
+    stdin?: boolean
     stdout?: boolean
     expected?: boolean
     stderr?: boolean
     compileOutput?: boolean
     status?: boolean
+    errorType?: boolean
+    enhancedError?: boolean
     memory?: boolean
     time?: boolean
+    exitCode?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
   }
 
-  export type TestCaseResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "submissionId" | "testCase" | "passed" | "stdout" | "expected" | "stderr" | "compileOutput" | "status" | "memory" | "time" | "createdAt" | "updatedAt", ExtArgs["result"]["testCaseResult"]>
+  export type TestCaseResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "submissionId" | "testCase" | "passed" | "stdin" | "stdout" | "expected" | "stderr" | "compileOutput" | "status" | "errorType" | "enhancedError" | "memory" | "time" | "exitCode" | "createdAt", ExtArgs["result"]["testCaseResult"]>
   export type TestCaseResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     submission?: boolean | SubmissionDefaultArgs<ExtArgs>
   }
@@ -5601,15 +5706,18 @@ export namespace Prisma {
       submissionId: string
       testCase: number
       passed: boolean
+      stdin: string | null
       stdout: string | null
       expected: string | null
       stderr: string | null
       compileOutput: string | null
       status: string
+      errorType: string | null
+      enhancedError: string | null
       memory: string | null
       time: string | null
+      exitCode: number | null
       createdAt: Date
-      updatedAt: Date
     }, ExtArgs["result"]["testCaseResult"]>
     composites: {}
   }
@@ -6038,15 +6146,18 @@ export namespace Prisma {
     readonly submissionId: FieldRef<"TestCaseResult", 'String'>
     readonly testCase: FieldRef<"TestCaseResult", 'Int'>
     readonly passed: FieldRef<"TestCaseResult", 'Boolean'>
+    readonly stdin: FieldRef<"TestCaseResult", 'String'>
     readonly stdout: FieldRef<"TestCaseResult", 'String'>
     readonly expected: FieldRef<"TestCaseResult", 'String'>
     readonly stderr: FieldRef<"TestCaseResult", 'String'>
     readonly compileOutput: FieldRef<"TestCaseResult", 'String'>
     readonly status: FieldRef<"TestCaseResult", 'String'>
+    readonly errorType: FieldRef<"TestCaseResult", 'String'>
+    readonly enhancedError: FieldRef<"TestCaseResult", 'String'>
     readonly memory: FieldRef<"TestCaseResult", 'String'>
     readonly time: FieldRef<"TestCaseResult", 'String'>
+    readonly exitCode: FieldRef<"TestCaseResult", 'Int'>
     readonly createdAt: FieldRef<"TestCaseResult", 'DateTime'>
-    readonly updatedAt: FieldRef<"TestCaseResult", 'DateTime'>
   }
     
 
@@ -9757,6 +9868,8 @@ export namespace Prisma {
     status: 'status',
     memory: 'memory',
     time: 'time',
+    testsPassed: 'testsPassed',
+    totalTests: 'totalTests',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -9769,15 +9882,18 @@ export namespace Prisma {
     submissionId: 'submissionId',
     testCase: 'testCase',
     passed: 'passed',
+    stdin: 'stdin',
     stdout: 'stdout',
     expected: 'expected',
     stderr: 'stderr',
     compileOutput: 'compileOutput',
     status: 'status',
+    errorType: 'errorType',
+    enhancedError: 'enhancedError',
     memory: 'memory',
     time: 'time',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    exitCode: 'exitCode',
+    createdAt: 'createdAt'
   };
 
   export type TestCaseResultScalarFieldEnum = (typeof TestCaseResultScalarFieldEnum)[keyof typeof TestCaseResultScalarFieldEnum]
@@ -10175,7 +10291,7 @@ export namespace Prisma {
     id?: StringFilter<"Submission"> | string
     userId?: StringFilter<"Submission"> | string
     problemId?: StringFilter<"Submission"> | string
-    sourceCode?: JsonFilter<"Submission">
+    sourceCode?: StringFilter<"Submission"> | string
     language?: StringFilter<"Submission"> | string
     stdin?: StringNullableFilter<"Submission"> | string | null
     stdout?: StringNullableFilter<"Submission"> | string | null
@@ -10184,6 +10300,8 @@ export namespace Prisma {
     status?: StringFilter<"Submission"> | string
     memory?: StringNullableFilter<"Submission"> | string | null
     time?: StringNullableFilter<"Submission"> | string | null
+    testsPassed?: IntNullableFilter<"Submission"> | number | null
+    totalTests?: IntNullableFilter<"Submission"> | number | null
     createdAt?: DateTimeFilter<"Submission"> | Date | string
     updatedAt?: DateTimeFilter<"Submission"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -10204,6 +10322,8 @@ export namespace Prisma {
     status?: SortOrder
     memory?: SortOrderInput | SortOrder
     time?: SortOrderInput | SortOrder
+    testsPassed?: SortOrderInput | SortOrder
+    totalTests?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -10218,7 +10338,7 @@ export namespace Prisma {
     NOT?: SubmissionWhereInput | SubmissionWhereInput[]
     userId?: StringFilter<"Submission"> | string
     problemId?: StringFilter<"Submission"> | string
-    sourceCode?: JsonFilter<"Submission">
+    sourceCode?: StringFilter<"Submission"> | string
     language?: StringFilter<"Submission"> | string
     stdin?: StringNullableFilter<"Submission"> | string | null
     stdout?: StringNullableFilter<"Submission"> | string | null
@@ -10227,6 +10347,8 @@ export namespace Prisma {
     status?: StringFilter<"Submission"> | string
     memory?: StringNullableFilter<"Submission"> | string | null
     time?: StringNullableFilter<"Submission"> | string | null
+    testsPassed?: IntNullableFilter<"Submission"> | number | null
+    totalTests?: IntNullableFilter<"Submission"> | number | null
     createdAt?: DateTimeFilter<"Submission"> | Date | string
     updatedAt?: DateTimeFilter<"Submission"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -10247,11 +10369,15 @@ export namespace Prisma {
     status?: SortOrder
     memory?: SortOrderInput | SortOrder
     time?: SortOrderInput | SortOrder
+    testsPassed?: SortOrderInput | SortOrder
+    totalTests?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SubmissionCountOrderByAggregateInput
+    _avg?: SubmissionAvgOrderByAggregateInput
     _max?: SubmissionMaxOrderByAggregateInput
     _min?: SubmissionMinOrderByAggregateInput
+    _sum?: SubmissionSumOrderByAggregateInput
   }
 
   export type SubmissionScalarWhereWithAggregatesInput = {
@@ -10261,7 +10387,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Submission"> | string
     userId?: StringWithAggregatesFilter<"Submission"> | string
     problemId?: StringWithAggregatesFilter<"Submission"> | string
-    sourceCode?: JsonWithAggregatesFilter<"Submission">
+    sourceCode?: StringWithAggregatesFilter<"Submission"> | string
     language?: StringWithAggregatesFilter<"Submission"> | string
     stdin?: StringNullableWithAggregatesFilter<"Submission"> | string | null
     stdout?: StringNullableWithAggregatesFilter<"Submission"> | string | null
@@ -10270,6 +10396,8 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"Submission"> | string
     memory?: StringNullableWithAggregatesFilter<"Submission"> | string | null
     time?: StringNullableWithAggregatesFilter<"Submission"> | string | null
+    testsPassed?: IntNullableWithAggregatesFilter<"Submission"> | number | null
+    totalTests?: IntNullableWithAggregatesFilter<"Submission"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Submission"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Submission"> | Date | string
   }
@@ -10282,15 +10410,18 @@ export namespace Prisma {
     submissionId?: StringFilter<"TestCaseResult"> | string
     testCase?: IntFilter<"TestCaseResult"> | number
     passed?: BoolFilter<"TestCaseResult"> | boolean
+    stdin?: StringNullableFilter<"TestCaseResult"> | string | null
     stdout?: StringNullableFilter<"TestCaseResult"> | string | null
     expected?: StringNullableFilter<"TestCaseResult"> | string | null
     stderr?: StringNullableFilter<"TestCaseResult"> | string | null
     compileOutput?: StringNullableFilter<"TestCaseResult"> | string | null
     status?: StringFilter<"TestCaseResult"> | string
+    errorType?: StringNullableFilter<"TestCaseResult"> | string | null
+    enhancedError?: StringNullableFilter<"TestCaseResult"> | string | null
     memory?: StringNullableFilter<"TestCaseResult"> | string | null
     time?: StringNullableFilter<"TestCaseResult"> | string | null
+    exitCode?: IntNullableFilter<"TestCaseResult"> | number | null
     createdAt?: DateTimeFilter<"TestCaseResult"> | Date | string
-    updatedAt?: DateTimeFilter<"TestCaseResult"> | Date | string
     submission?: XOR<SubmissionScalarRelationFilter, SubmissionWhereInput>
   }
 
@@ -10299,15 +10430,18 @@ export namespace Prisma {
     submissionId?: SortOrder
     testCase?: SortOrder
     passed?: SortOrder
+    stdin?: SortOrderInput | SortOrder
     stdout?: SortOrderInput | SortOrder
     expected?: SortOrderInput | SortOrder
     stderr?: SortOrderInput | SortOrder
     compileOutput?: SortOrderInput | SortOrder
     status?: SortOrder
+    errorType?: SortOrderInput | SortOrder
+    enhancedError?: SortOrderInput | SortOrder
     memory?: SortOrderInput | SortOrder
     time?: SortOrderInput | SortOrder
+    exitCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
     submission?: SubmissionOrderByWithRelationInput
   }
 
@@ -10319,15 +10453,18 @@ export namespace Prisma {
     submissionId?: StringFilter<"TestCaseResult"> | string
     testCase?: IntFilter<"TestCaseResult"> | number
     passed?: BoolFilter<"TestCaseResult"> | boolean
+    stdin?: StringNullableFilter<"TestCaseResult"> | string | null
     stdout?: StringNullableFilter<"TestCaseResult"> | string | null
     expected?: StringNullableFilter<"TestCaseResult"> | string | null
     stderr?: StringNullableFilter<"TestCaseResult"> | string | null
     compileOutput?: StringNullableFilter<"TestCaseResult"> | string | null
     status?: StringFilter<"TestCaseResult"> | string
+    errorType?: StringNullableFilter<"TestCaseResult"> | string | null
+    enhancedError?: StringNullableFilter<"TestCaseResult"> | string | null
     memory?: StringNullableFilter<"TestCaseResult"> | string | null
     time?: StringNullableFilter<"TestCaseResult"> | string | null
+    exitCode?: IntNullableFilter<"TestCaseResult"> | number | null
     createdAt?: DateTimeFilter<"TestCaseResult"> | Date | string
-    updatedAt?: DateTimeFilter<"TestCaseResult"> | Date | string
     submission?: XOR<SubmissionScalarRelationFilter, SubmissionWhereInput>
   }, "id">
 
@@ -10336,15 +10473,18 @@ export namespace Prisma {
     submissionId?: SortOrder
     testCase?: SortOrder
     passed?: SortOrder
+    stdin?: SortOrderInput | SortOrder
     stdout?: SortOrderInput | SortOrder
     expected?: SortOrderInput | SortOrder
     stderr?: SortOrderInput | SortOrder
     compileOutput?: SortOrderInput | SortOrder
     status?: SortOrder
+    errorType?: SortOrderInput | SortOrder
+    enhancedError?: SortOrderInput | SortOrder
     memory?: SortOrderInput | SortOrder
     time?: SortOrderInput | SortOrder
+    exitCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
     _count?: TestCaseResultCountOrderByAggregateInput
     _avg?: TestCaseResultAvgOrderByAggregateInput
     _max?: TestCaseResultMaxOrderByAggregateInput
@@ -10360,15 +10500,18 @@ export namespace Prisma {
     submissionId?: StringWithAggregatesFilter<"TestCaseResult"> | string
     testCase?: IntWithAggregatesFilter<"TestCaseResult"> | number
     passed?: BoolWithAggregatesFilter<"TestCaseResult"> | boolean
+    stdin?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     stdout?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     expected?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     stderr?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     compileOutput?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     status?: StringWithAggregatesFilter<"TestCaseResult"> | string
+    errorType?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
+    enhancedError?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     memory?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
     time?: StringNullableWithAggregatesFilter<"TestCaseResult"> | string | null
+    exitCode?: IntNullableWithAggregatesFilter<"TestCaseResult"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"TestCaseResult"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"TestCaseResult"> | Date | string
   }
 
   export type ProblemSolvedWhereInput = {
@@ -10792,7 +10935,7 @@ export namespace Prisma {
 
   export type SubmissionCreateInput = {
     id?: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -10801,6 +10944,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubmissionInput
@@ -10812,7 +10957,7 @@ export namespace Prisma {
     id?: string
     userId: string
     problemId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -10821,6 +10966,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     testCases?: TestCaseResultUncheckedCreateNestedManyWithoutSubmissionInput
@@ -10828,7 +10975,7 @@ export namespace Prisma {
 
   export type SubmissionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10837,6 +10984,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubmissionNestedInput
@@ -10848,7 +10997,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10857,6 +11006,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     testCases?: TestCaseResultUncheckedUpdateManyWithoutSubmissionNestedInput
@@ -10866,7 +11017,7 @@ export namespace Prisma {
     id?: string
     userId: string
     problemId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -10875,13 +11026,15 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type SubmissionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10890,6 +11043,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10898,7 +11053,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10907,6 +11062,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10915,15 +11072,18 @@ export namespace Prisma {
     id?: string
     testCase: number
     passed: boolean
+    stdin?: string | null
     stdout?: string | null
     expected?: string | null
     stderr?: string | null
     compileOutput?: string | null
     status: string
+    errorType?: string | null
+    enhancedError?: string | null
     memory?: string | null
     time?: string | null
+    exitCode?: number | null
     createdAt?: Date | string
-    updatedAt?: Date | string
     submission: SubmissionCreateNestedOneWithoutTestCasesInput
   }
 
@@ -10932,30 +11092,36 @@ export namespace Prisma {
     submissionId: string
     testCase: number
     passed: boolean
+    stdin?: string | null
     stdout?: string | null
     expected?: string | null
     stderr?: string | null
     compileOutput?: string | null
     status: string
+    errorType?: string | null
+    enhancedError?: string | null
     memory?: string | null
     time?: string | null
+    exitCode?: number | null
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type TestCaseResultUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submission?: SubmissionUpdateOneRequiredWithoutTestCasesNestedInput
   }
 
@@ -10964,15 +11130,18 @@ export namespace Prisma {
     submissionId?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TestCaseResultCreateManyInput = {
@@ -10980,30 +11149,36 @@ export namespace Prisma {
     submissionId: string
     testCase: number
     passed: boolean
+    stdin?: string | null
     stdout?: string | null
     expected?: string | null
     stderr?: string | null
     compileOutput?: string | null
     status: string
+    errorType?: string | null
+    enhancedError?: string | null
     memory?: string | null
     time?: string | null
+    exitCode?: number | null
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type TestCaseResultUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TestCaseResultUncheckedUpdateManyInput = {
@@ -11011,15 +11186,18 @@ export namespace Prisma {
     submissionId?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProblemSolvedCreateInput = {
@@ -11516,6 +11694,17 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ProblemScalarRelationFilter = {
     is?: ProblemWhereInput
     isNot?: ProblemWhereInput
@@ -11544,14 +11733,22 @@ export namespace Prisma {
     status?: SortOrder
     memory?: SortOrder
     time?: SortOrder
+    testsPassed?: SortOrder
+    totalTests?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SubmissionAvgOrderByAggregateInput = {
+    testsPassed?: SortOrder
+    totalTests?: SortOrder
   }
 
   export type SubmissionMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     problemId?: SortOrder
+    sourceCode?: SortOrder
     language?: SortOrder
     stdin?: SortOrder
     stdout?: SortOrder
@@ -11560,6 +11757,8 @@ export namespace Prisma {
     status?: SortOrder
     memory?: SortOrder
     time?: SortOrder
+    testsPassed?: SortOrder
+    totalTests?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11568,6 +11767,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     problemId?: SortOrder
+    sourceCode?: SortOrder
     language?: SortOrder
     stdin?: SortOrder
     stdout?: SortOrder
@@ -11576,8 +11776,31 @@ export namespace Prisma {
     status?: SortOrder
     memory?: SortOrder
     time?: SortOrder
+    testsPassed?: SortOrder
+    totalTests?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SubmissionSumOrderByAggregateInput = {
+    testsPassed?: SortOrder
+    totalTests?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -11606,19 +11829,23 @@ export namespace Prisma {
     submissionId?: SortOrder
     testCase?: SortOrder
     passed?: SortOrder
+    stdin?: SortOrder
     stdout?: SortOrder
     expected?: SortOrder
     stderr?: SortOrder
     compileOutput?: SortOrder
     status?: SortOrder
+    errorType?: SortOrder
+    enhancedError?: SortOrder
     memory?: SortOrder
     time?: SortOrder
+    exitCode?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type TestCaseResultAvgOrderByAggregateInput = {
     testCase?: SortOrder
+    exitCode?: SortOrder
   }
 
   export type TestCaseResultMaxOrderByAggregateInput = {
@@ -11626,15 +11853,18 @@ export namespace Prisma {
     submissionId?: SortOrder
     testCase?: SortOrder
     passed?: SortOrder
+    stdin?: SortOrder
     stdout?: SortOrder
     expected?: SortOrder
     stderr?: SortOrder
     compileOutput?: SortOrder
     status?: SortOrder
+    errorType?: SortOrder
+    enhancedError?: SortOrder
     memory?: SortOrder
     time?: SortOrder
+    exitCode?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type TestCaseResultMinOrderByAggregateInput = {
@@ -11642,19 +11872,23 @@ export namespace Prisma {
     submissionId?: SortOrder
     testCase?: SortOrder
     passed?: SortOrder
+    stdin?: SortOrder
     stdout?: SortOrder
     expected?: SortOrder
     stderr?: SortOrder
     compileOutput?: SortOrder
     status?: SortOrder
+    errorType?: SortOrder
+    enhancedError?: SortOrder
     memory?: SortOrder
     time?: SortOrder
+    exitCode?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type TestCaseResultSumOrderByAggregateInput = {
     testCase?: SortOrder
+    exitCode?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -12148,6 +12382,14 @@ export namespace Prisma {
     connect?: TestCaseResultWhereUniqueInput | TestCaseResultWhereUniqueInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutSubmissionNestedInput = {
     create?: XOR<UserCreateWithoutSubmissionInput, UserUncheckedCreateWithoutSubmissionInput>
     connectOrCreate?: UserCreateOrConnectWithoutSubmissionInput
@@ -12496,6 +12738,33 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -12590,7 +12859,7 @@ export namespace Prisma {
 
   export type SubmissionCreateWithoutUserInput = {
     id?: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -12599,6 +12868,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     problem: ProblemCreateNestedOneWithoutSubmissionInput
@@ -12608,7 +12879,7 @@ export namespace Prisma {
   export type SubmissionUncheckedCreateWithoutUserInput = {
     id?: string
     problemId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -12617,6 +12888,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     testCases?: TestCaseResultUncheckedCreateNestedManyWithoutSubmissionInput
@@ -12745,7 +13018,7 @@ export namespace Prisma {
     id?: StringFilter<"Submission"> | string
     userId?: StringFilter<"Submission"> | string
     problemId?: StringFilter<"Submission"> | string
-    sourceCode?: JsonFilter<"Submission">
+    sourceCode?: StringFilter<"Submission"> | string
     language?: StringFilter<"Submission"> | string
     stdin?: StringNullableFilter<"Submission"> | string | null
     stdout?: StringNullableFilter<"Submission"> | string | null
@@ -12754,6 +13027,8 @@ export namespace Prisma {
     status?: StringFilter<"Submission"> | string
     memory?: StringNullableFilter<"Submission"> | string | null
     time?: StringNullableFilter<"Submission"> | string | null
+    testsPassed?: IntNullableFilter<"Submission"> | number | null
+    totalTests?: IntNullableFilter<"Submission"> | number | null
     createdAt?: DateTimeFilter<"Submission"> | Date | string
     updatedAt?: DateTimeFilter<"Submission"> | Date | string
   }
@@ -12848,7 +13123,7 @@ export namespace Prisma {
 
   export type SubmissionCreateWithoutProblemInput = {
     id?: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -12857,6 +13132,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubmissionInput
@@ -12866,7 +13143,7 @@ export namespace Prisma {
   export type SubmissionUncheckedCreateWithoutProblemInput = {
     id?: string
     userId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -12875,6 +13152,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     testCases?: TestCaseResultUncheckedCreateNestedManyWithoutSubmissionInput
@@ -13120,30 +13399,36 @@ export namespace Prisma {
     id?: string
     testCase: number
     passed: boolean
+    stdin?: string | null
     stdout?: string | null
     expected?: string | null
     stderr?: string | null
     compileOutput?: string | null
     status: string
+    errorType?: string | null
+    enhancedError?: string | null
     memory?: string | null
     time?: string | null
+    exitCode?: number | null
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type TestCaseResultUncheckedCreateWithoutSubmissionInput = {
     id?: string
     testCase: number
     passed: boolean
+    stdin?: string | null
     stdout?: string | null
     expected?: string | null
     stderr?: string | null
     compileOutput?: string | null
     status: string
+    errorType?: string | null
+    enhancedError?: string | null
     memory?: string | null
     time?: string | null
+    exitCode?: number | null
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type TestCaseResultCreateOrConnectWithoutSubmissionInput = {
@@ -13272,20 +13557,23 @@ export namespace Prisma {
     submissionId?: StringFilter<"TestCaseResult"> | string
     testCase?: IntFilter<"TestCaseResult"> | number
     passed?: BoolFilter<"TestCaseResult"> | boolean
+    stdin?: StringNullableFilter<"TestCaseResult"> | string | null
     stdout?: StringNullableFilter<"TestCaseResult"> | string | null
     expected?: StringNullableFilter<"TestCaseResult"> | string | null
     stderr?: StringNullableFilter<"TestCaseResult"> | string | null
     compileOutput?: StringNullableFilter<"TestCaseResult"> | string | null
     status?: StringFilter<"TestCaseResult"> | string
+    errorType?: StringNullableFilter<"TestCaseResult"> | string | null
+    enhancedError?: StringNullableFilter<"TestCaseResult"> | string | null
     memory?: StringNullableFilter<"TestCaseResult"> | string | null
     time?: StringNullableFilter<"TestCaseResult"> | string | null
+    exitCode?: IntNullableFilter<"TestCaseResult"> | number | null
     createdAt?: DateTimeFilter<"TestCaseResult"> | Date | string
-    updatedAt?: DateTimeFilter<"TestCaseResult"> | Date | string
   }
 
   export type SubmissionCreateWithoutTestCasesInput = {
     id?: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -13294,6 +13582,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubmissionInput
@@ -13304,7 +13594,7 @@ export namespace Prisma {
     id?: string
     userId: string
     problemId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -13313,6 +13603,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13335,7 +13627,7 @@ export namespace Prisma {
 
   export type SubmissionUpdateWithoutTestCasesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13344,6 +13636,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubmissionNestedInput
@@ -13354,7 +13648,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13363,6 +13657,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13824,7 +14120,7 @@ export namespace Prisma {
   export type SubmissionCreateManyUserInput = {
     id?: string
     problemId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -13833,6 +14129,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13914,7 +14212,7 @@ export namespace Prisma {
 
   export type SubmissionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13923,6 +14221,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problem?: ProblemUpdateOneRequiredWithoutSubmissionNestedInput
@@ -13932,7 +14232,7 @@ export namespace Prisma {
   export type SubmissionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13941,6 +14241,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     testCases?: TestCaseResultUncheckedUpdateManyWithoutSubmissionNestedInput
@@ -13949,7 +14251,7 @@ export namespace Prisma {
   export type SubmissionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13958,6 +14260,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14012,7 +14316,7 @@ export namespace Prisma {
   export type SubmissionCreateManyProblemInput = {
     id?: string
     userId: string
-    sourceCode: JsonNullValueInput | InputJsonValue
+    sourceCode: string
     language: string
     stdin?: string | null
     stdout?: string | null
@@ -14021,6 +14325,8 @@ export namespace Prisma {
     status: string
     memory?: string | null
     time?: string | null
+    testsPassed?: number | null
+    totalTests?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14041,7 +14347,7 @@ export namespace Prisma {
 
   export type SubmissionUpdateWithoutProblemInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14050,6 +14356,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubmissionNestedInput
@@ -14059,7 +14367,7 @@ export namespace Prisma {
   export type SubmissionUncheckedUpdateWithoutProblemInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14068,6 +14376,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     testCases?: TestCaseResultUncheckedUpdateManyWithoutSubmissionNestedInput
@@ -14076,7 +14386,7 @@ export namespace Prisma {
   export type SubmissionUncheckedUpdateManyWithoutProblemInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
-    sourceCode?: JsonNullValueInput | InputJsonValue
+    sourceCode?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14085,6 +14395,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    testsPassed?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTests?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14135,60 +14447,72 @@ export namespace Prisma {
     id?: string
     testCase: number
     passed: boolean
+    stdin?: string | null
     stdout?: string | null
     expected?: string | null
     stderr?: string | null
     compileOutput?: string | null
     status: string
+    errorType?: string | null
+    enhancedError?: string | null
     memory?: string | null
     time?: string | null
+    exitCode?: number | null
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type TestCaseResultUpdateWithoutSubmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TestCaseResultUncheckedUpdateWithoutSubmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TestCaseResultUncheckedUpdateManyWithoutSubmissionInput = {
     id?: StringFieldUpdateOperationsInput | string
     testCase?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
+    stdin?: NullableStringFieldUpdateOperationsInput | string | null
     stdout?: NullableStringFieldUpdateOperationsInput | string | null
     expected?: NullableStringFieldUpdateOperationsInput | string | null
     stderr?: NullableStringFieldUpdateOperationsInput | string | null
     compileOutput?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorType?: NullableStringFieldUpdateOperationsInput | string | null
+    enhancedError?: NullableStringFieldUpdateOperationsInput | string | null
     memory?: NullableStringFieldUpdateOperationsInput | string | null
     time?: NullableStringFieldUpdateOperationsInput | string | null
+    exitCode?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProblemInPlaylistCreateManyPlaylistInput = {
