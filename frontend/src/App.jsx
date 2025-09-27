@@ -21,6 +21,7 @@ import Faq from "./components/Faq";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import Contact from "./components/Contact";
 import Submissions from "./pages/Submission";
+import ProfileSubmission from "./components/ProfileSubmission";
 
 const App = () => {
   const { authUser, check, isCheckingAuth } = useAuthStore();
@@ -71,6 +72,7 @@ const App = () => {
           element={authUser ? <Submissions /> : <Navigate to="/login" />}
         />
 
+        <Route path="/profileSubmission" element={<ProfileSubmission />} />
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />

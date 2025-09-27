@@ -1,17 +1,25 @@
+// import { languageId } from "../../../frontend/src/utils/constants.js";
 import { db } from "../libs/db.js";
+import axios from "axios";
 import {
   getLanguageName,
   pollBatchResults,
   submitBatch,
 } from "../libs/judge0.lib.js";
+const pistonLanguageMap = {
+  63: { language: "javascript", version: "18.15.0" },
+  71: { language: "python", version: "3.10.0" },
+  62: { language: "java", version: "15.0.2" },
+};
 
 export const executeCode = async (req, res) => {
   try {
-    const { source_code, language_id, stdin, expected_outputs, problemId } =
-      req.body;
-
+    const { source_code, language_id, stdin, expected_outputs, problemId } = req.body;
     const userId = req.user.id;
 
+    // console.log(source_code, language_id, stdin, expected_outputs, problemId, userId);
+    // console.log(language_id);
+    
     // Validate test cases
     if (
       !Array.isArray(stdin) ||
@@ -22,29 +30,29 @@ export const executeCode = async (req, res) => {
       return res.status(400).json({ error: "Invalid or Missing test cases" });
     }
 
-    // Reset detailedResults before executing new code
+    // console.log("Validated test cases");
+
     const detailedResults = [];
-
-    // Prepare each test case for Judge0 batch submission
-    const submissions = stdin.map((input) => ({
-      source_code,
-      language_id,
-      stdin: input,
-    }));
-
-    // Send batch of submissions to Judge0
-    const submitResponse = await submitBatch(submissions);
-    const tokens = submitResponse.map((res) => res.token);
-
-    // Poll Judge0 for results of all submitted test cases
-    const results = await pollBatchResults(tokens);
-
-    // Analyze test case results
     let allPassed = true;
-    results.forEach((result, i) => {
-      const stdout = result.stdout?.trim();
-      const expected_output = expected_outputs[i]?.trim();
-      const passed = stdout === expected_output;
+     
+    // Run each test case on Piston
+    for (let i = 0; i < stdin.length; i++) {
+      const input = stdin[i];
+      const expected_output = expected_outputs[i];
+      // console.log(language_id.language, language_id.version, stdin);
+      
+      const response = await axios.post("https://emkc.org/api/v2/piston/execute", {
+        language: pistonLanguageMap[language_id].language,  // e.g. "javascript"
+        version: pistonLanguageMap[language_id].version,    // e.g. "18.15.0"
+        files: [{ name: "Main", content: source_code }],
+        stdin: input,
+      });
+
+      const runResult = response.data.run;
+
+      const stdout = runResult.stdout?.trim() || "";
+      const stderr = runResult.stderr || null;
+      const passed = stdout === expected_output.trim();
 
       if (!passed) allPassed = false;
 
@@ -52,20 +60,25 @@ export const executeCode = async (req, res) => {
         testCase: i + 1,
         passed,
         stdout,
-        expected: expected_output,
-        stderr: result.stderr || null,
-        compile_output: result.compile_output || null,
-        status: result.status.description,
+        expected: expected_output.trim(),
+        stderr,
+        compile_output: runResult.compile_output || null,
+        status: runResult.code === 0 ? "Accepted" : "Error",
       });
-    });
+    }
 
+    // console.log("detailedResults", detailedResults);
+    console.log("all passed", allPassed);
+    console.log("detailed result", detailedResults);
+    
     res.status(200).json({
       success: true,
       message: "Code Executed Successfully!",
+      allPassed,
       detailedResults,
     });
   } catch (error) {
-    console.error("Error executing code:", error.message);
+    // console.error("Error executing code:", error.message);
     res.status(500).json({ error: "Failed to execute code" });
   }
 };

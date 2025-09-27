@@ -14,10 +14,9 @@ const useExecuteCode = create((set)=>({
             const res = await axiosInstance.post('/execute',{source_code,language_id,stdin,expected_outputs,problemId});
             set({submission:res.data.submission})
             
-            
             toast.success(res.data.message)
         } catch (error) {
-            console.log("Error while executing code",error);
+            // console.log("Error while executing code",error);
             toast.error("Error while executing code");
         }finally{
             set({isCodeExecuting:false})
