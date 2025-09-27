@@ -16,6 +16,11 @@ import CreatePlaylist from "./pages/CreatePlaylist";
 import ViewPlaylist from "./pages/ViewPlaylist";
 import CreateProblem from "./components/CreateProblem";
 import Navbar from "./components/Navbar";
+import About from "./components/About";
+import Faq from "./components/Faq";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import Contact from "./components/Contact";
+import Submissions from "./pages/Submission";
 
 const App = () => {
   const { authUser, check, isCheckingAuth } = useAuthStore();
@@ -61,6 +66,15 @@ const App = () => {
           path="/problem/:id"
           element={isProblemLoading ? <LoadingSpinner /> : <ProblemPage />}
         />
+        <Route
+          path="/submissions"
+          element={authUser ? <Submissions /> : <Navigate to="/login" />}
+        />
+
+        <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );

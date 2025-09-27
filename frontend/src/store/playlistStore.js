@@ -29,11 +29,8 @@ const usePlaylistStore = create((set) => ({
     getPlaylistsDetails: async (silent = false) => {
         try {
             const res = await axiosInstance.get('/playlist')
-            // if(!silent) toast.success(res.data.message);
             set({ playlists: res.data.playlists })
         } catch (error) {
-            // console.log("Error getting all Playlist details", error);
-            // if(!silent) toast.error("Error getting all Playlist details")
         }
     },
 
