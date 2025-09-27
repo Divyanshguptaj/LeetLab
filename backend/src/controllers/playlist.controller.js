@@ -53,7 +53,7 @@ export const addProblemToPlaylist = async (req, res) => {
 		const playlist = await db.playlist.findUnique({
 			where: { id: playlistId },
 		});
-		// console.log(playlist);
+		console.log(playlist);
 		
 		if (!playlist) {
 			return res.status(404).json({ message: "Playlist not found" });
@@ -68,13 +68,13 @@ export const addProblemToPlaylist = async (req, res) => {
 			playlistId,
 			problemId,
 		}));
-		// console.log("data", data);
+		console.log("data", data);
 		
 		const result = await db.problemInPlaylist.createMany({
 			data,
 			skipDuplicates: true, // avoids adding same problem twice
 		});
-		// console.log("result", result);
+		console.log("result", result);
 		
 		return res.status(200).json({
 			message: "Problems added to playlist successfully",
@@ -187,6 +187,49 @@ export const deletePlaylistById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting playlist:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+  
+export const updatePlaylist = async (req, res) => {
+  try {
+    const { id } = req.params; // Correctly get 'id' from params
+    const userId = req.user?.id; // from authMiddleware
+    const { name, description } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // find playlist
+    const playlist = await prisma.playlist.findUnique({
+      where: { id: id },
+    });
+
+    if (!playlist) {
+      return res.status(404).json({ message: "Playlist not found" });
+    }
+
+    // check ownership
+    if (playlist.userId !== userId) {
+      return res.status(403).json({ message: "Not authorized to update this playlist" });
+    }
+
+    // update playlist
+    const updatedPlaylist = await prisma.playlist.update({
+      where: { id: id },
+      data: {
+        name,
+        description,
+      },
+    });
+
+    return res.status(200).json({
+      message: "Playlist updated successfully",
+      updatedPlaylist,
+    });
+  } catch (error) {
+    console.error("Error updating playlist:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

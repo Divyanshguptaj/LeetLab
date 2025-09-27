@@ -19,11 +19,9 @@ const CreatePlaylist = () => {
 
   const addProblemToPlaylist = async (problemIds, playlistId) => {
     try {
-      // console.log("here i am ");
       const res = await axiosInstance.post(`/playlist/add-problem/${playlistId}`, { problemIds });
       toast.success(res.data.message);
     } catch (error) {
-      // console.log("Error adding problem to playlist", error);
       toast.error("Error adding problem to playlist");
     }
   }

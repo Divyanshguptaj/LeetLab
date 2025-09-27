@@ -3,8 +3,8 @@ import toast from 'react-hot-toast'
 import axiosInstance from '../utils/axios.js'
 
 const usePlaylistStore = create((set) => ({
-
-
+    isAddingProblemToPlaylist: false,
+    isDeletingProblemFromPlaylist: false,
     isCreatingPlaylist: false,
     playlist: null,
     playlists: [],
@@ -39,7 +39,6 @@ const usePlaylistStore = create((set) => ({
             const res = await axiosInstance.get(`/playlist/${id}`)
             set({ playlist: res.data.playlist });
         } catch (error) {
-            // console.log("Error getting details of playlsit",error);
             toast.error("Error getting details of playlsit");
 
         }
@@ -53,8 +52,44 @@ const usePlaylistStore = create((set) => ({
             }));
             toast.success(res.data.message);
         } catch (error) {
-            console.log("Error deleting playlist", error);
             toast.error("Error deleting playlist");
+
+        }
+    },
+
+    updatePlaylist: async (id, data) => {
+        try {
+            const res = await axiosInstance.put(`/playlist/update/${id}`, data);
+            set(state => ({
+                playlist: { ...state.playlist, ...data }
+            }));
+            // toast.success(res.data.message);
+        } catch (error) {
+            toast.error("Error updating playlist");
+        }
+    },
+
+    addProblemToPlaylist: async (playlistId, problemIds) => {
+        try {
+            
+            const res = await axiosInstance.post(`/playlist/add-problem/${playlistId}`, { problemIds });
+            // const res = await axiosInstance.post(`/playlist/add-problem/${id}`, { problemIds });
+            set((state) => ({
+                playlists: state.playlists.map((playlist) =>
+                    playlist.id === id
+                        ?
+                        {
+                            ...playlist,
+                            problems: playlist.problems.filter(
+                                (problem) => !problemIds.includes(problem.id)
+                            )
+                        }
+                        : playlist
+                )
+            }));
+            toast.success(res.data.message);
+        } catch (error) {
+            toast.error("Error adding Problem to playlist");
 
         }
     },
@@ -84,11 +119,9 @@ const usePlaylistStore = create((set) => ({
 
             toast.success(res.data.message);
         } catch (error) {
-            console.log("Error deleting problem from playlist");
             toast.error("Error deleting problem from playlist", error)
         }
     }
-
 
 }))
 

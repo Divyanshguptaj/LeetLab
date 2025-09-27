@@ -22,6 +22,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import Contact from "./components/Contact";
 import Submissions from "./pages/Submission";
 import ProfileSubmission from "./components/ProfileSubmission";
+import ViewPlaylistDetails from "./pages/ViewPlaylistDetails";
 
 const App = () => {
   const { authUser, check, isCheckingAuth } = useAuthStore();
@@ -56,6 +57,7 @@ const App = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/createPlaylist" element={<CreatePlaylist />} />
         <Route path="/viewPlaylist" element={<ViewPlaylist />} />
+        <Route path="/viewPlaylist/:id" element={<ViewPlaylistDetails />} />
         <Route path="/createProblem" element={<CreateProblem />} />
 
         <Route

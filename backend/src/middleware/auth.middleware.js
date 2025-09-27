@@ -2,8 +2,10 @@ import jwt from "jsonwebtoken";
 import { db } from "../libs/db.js";
 export const authMiddleware = async (req, res, next) => {
   try {
+    
     const token = req.cookies.token;
     // console.log(token);
+    // console.log("alfjaslkfjaslkfjsj");
     
     if (!token) {
       return res
@@ -35,6 +37,8 @@ export const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized - user not found" });
     }
     req.user = user;
+    // console.log("user", user);
+    
     next();
   } catch (error) {
     return res.status(401).json({ message: "Some error occured" });
