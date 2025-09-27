@@ -4,9 +4,10 @@ import { MdDeleteForever } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import DeleteConfirmationModal from "../components/modals/DeleteConfirmationModal";
+import { Plus } from "lucide-react";
 
 const ViewPlaylist = () => {
-  const { getPlaylistsDetails, playlists, deletePlaylist } = usePlaylistStore();
+  const { getPlaylistsDetails, playlists, deletePlaylist, createPlaylist } = usePlaylistStore();
 
   // Modal state
   const [deleteModal, setDeleteModal] = useState({
@@ -61,17 +62,15 @@ const ViewPlaylist = () => {
       <div className="min-h-screen w-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-base-200 to-base-300 animate-fade-in">
         {/* Header Section */}
         <div className="w-full max-w-4xl text-center mb-12 relative">
-          <div className="absolute right-0 top-0">
-            <Link 
-              to="/create-playlist" 
-              className="btn bg-white gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Create New Playlist
+          <div className="absolute right-0 top-0 z-10">
+            <Link to="/createPlaylist">
+              <button className="btn btn-secondary flex items-center gap-2 btn-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <Plus className="w-5 h-5" />
+                Create Playlist
+              </button>
             </Link>
           </div>
+
           <h1 className="text-5xl font-extrabold text-primary mb-4 animate-fade-in-down drop-shadow-lg">
             My Playlists
           </h1>
