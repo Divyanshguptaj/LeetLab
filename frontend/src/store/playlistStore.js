@@ -71,28 +71,33 @@ const usePlaylistStore = create((set) => ({
 
     addProblemToPlaylist: async (playlistId, problemIds) => {
         try {
-            
-            const res = await axiosInstance.post(`/playlist/add-problem/${playlistId}`, { problemIds });
-            // const res = await axiosInstance.post(`/playlist/add-problem/${id}`, { problemIds });
+            const res = await axiosInstance.post(
+                `/playlist/add-problem/${playlistId}`,
+                { problemIds }
+            );
+    
             set((state) => ({
                 playlists: state.playlists.map((playlist) =>
-                    playlist.id === id
-                        ?
-                        {
-                            ...playlist,
-                            problems: playlist.problems.filter(
-                                (problem) => !problemIds.includes(problem.id)
-                            )
-                        }
+                    playlist.id === playlistId
+                        ? {
+                              ...playlist,
+                              problems: [
+                                  ...playlist.problems,
+                                  // if API returns updated problems, you can replace this
+                                  ...problemIds.map((pid) => ({ id: pid }))
+                              ],
+                          }
                         : playlist
-                )
+                ),
             }));
-            toast.success(res.data.message);
+    
+            // toast.success(res.data.message);
         } catch (error) {
             toast.error("Error adding Problem to playlist");
-
+            console.log(error);
         }
     },
+    
 
     deleteProblemFromPlaylist: async (playlistId, problemIds) => {
         try {

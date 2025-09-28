@@ -129,15 +129,15 @@ const ViewPlaylistDetail = () => {
         toast.error('Please select at least one problem.');
         return;
       }
-      console.log(problemIds, playlist.id);
+      // console.log(problemIds, playlist.id);
       
       await addProblemToPlaylist(playlist.id, problemIds);
       toast.success('Problems added successfully!');
       await getPlaylistDetail(id); // Refresh playlist data
       setAddProblemModalOpen(false); // Close modal on success
     } catch (error) {
-      toast.error('Failed to add problems.');
-      console.error('Error adding problems:', error);
+      toast.error('Inside handle add problem!!');
+      // console.error('Error adding problems:', error);
     }
   };
 
