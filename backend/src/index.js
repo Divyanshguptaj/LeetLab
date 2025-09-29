@@ -20,6 +20,8 @@ app.use(cors({
   credentials: true
 }));
 
+app.use(cors());  
+
 app.get("/", (req, res) => {
   res.send("Hello, welcome to LeetLab");
 });

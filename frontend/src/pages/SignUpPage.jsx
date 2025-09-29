@@ -11,7 +11,6 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const formData = {name,email,password};
     signUp(formData);
     setName('');
