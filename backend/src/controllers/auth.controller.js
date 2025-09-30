@@ -26,12 +26,19 @@ export const register = async (req, res) => {
     const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: false, // true in prod, false in dev
+    //   sameSite: "lax", // 👈 important for cross-site cookies
+    //   maxAge: 1000 * 60 * 60 * 24 * 7,
+    // });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production", // true on prod
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
+
     res.status(201).json({
       message: "User created successfully",
       user: {
@@ -47,7 +54,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res) => { 
   const { email, password } = req.body;
   try {
     const user = await db.user.findUnique({
@@ -56,7 +63,7 @@ export const login = async (req, res) => {
       },
     });
     // console.log(user);
-
+    
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
@@ -65,18 +72,25 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" }); // haker ko ye nhi btatae ki password match nhi kr ra
     }
-
+    
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
     // console.log(token);
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: false, // true in prod, false in dev
+    //   sameSite: "lax", // 👈 important for cross-site cookies
+    //   maxAge: 1000 * 60 * 60 * 24 * 7,
+    // });
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // true on prod
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-
+    
     res.status(201).json({
       success: true,
       message: "User login successfully",
@@ -124,7 +138,7 @@ export const check = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(decoded);
-
+    
     const user = await db.user.findUnique({
       where: {
         id: decoded.id,
@@ -138,7 +152,7 @@ export const check = async (req, res) => {
       },
     });
     // console.log(user);
-
+    
     if (!user) {
       return res
         .status(404)
@@ -185,9 +199,11 @@ export const forgetPassword = async (req, res) => {
         password: hashedPassword,
       },
     });
-    return res.status(200).json({
-      message: "Password updated successfully.  Login with new password",
-    });
+    return res
+      .status(200)
+      .json({
+        message: "Password updated successfully.  Login with new password",
+      });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Error updating password" });
@@ -196,7 +212,7 @@ export const forgetPassword = async (req, res) => {
 
 export const changeRole = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email} = req.body;
     const user = await db.user.findUnique({
       where: {
         email,
@@ -207,7 +223,7 @@ export const changeRole = async (req, res) => {
     }
     const newRole = user.role === "ADMIN" ? UserRole.USER : UserRole.ADMIN;
 
-    const updatedUser = await db.user.update({
+   const updatedUser = await db.user.update({
       where: {
         email,
       },

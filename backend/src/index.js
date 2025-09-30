@@ -8,23 +8,31 @@ import playlistRoutes from './routes/playlist.routes.js';
 import executeRoutes from './routes/execute.routes.js';
 import submissionRoutes from './routes/submission.routes.js';
 import cookieParser from 'cookie-parser';
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+// ✅ CORS fix
 app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://leetlab-ten.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
+  credentials: true,
 }));
 
-
-// app.use(cors());  
+// ✅ Handle preflight
+app.options("*", cors({
+  origin: [
+    "http://localhost:5173",
+    "https://leetlab-ten.vercel.app"
+  ],
+  credentials: true,
+}));
 
 app.get("/", (req, res) => {
   res.send("Hello, welcome to LeetLab");
@@ -40,7 +48,7 @@ const PORT = process.env.PORT || 8080;
 
 async function startServer() {
   try {
-    await db.$connect();  // ✅ connect to DB
+    await db.$connect();  
     console.log("✅ Connected to database");
 
     app.listen(PORT, () => {
