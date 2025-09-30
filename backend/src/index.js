@@ -26,13 +26,13 @@ app.use(cors({
 }));
 
 // ✅ Handle preflight
-app.options("*", cors({
-  origin: [
-    "http://localhost:5173",
-    "https://leetlab-ten.vercel.app"
-  ],
-  credentials: true,
-}));
+// app.options("*", cors({
+//   origin: [
+//     "http://localhost:5173",
+//     "https://leetlab-ten.vercel.app"
+//   ],
+//   credentials: true,
+// }));
 
 app.get("/", (req, res) => {
   res.send("Hello, welcome to LeetLab");
