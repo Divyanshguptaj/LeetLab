@@ -52,10 +52,8 @@ const useAuthStore = create((set) => ({
     try {
       await axiosInstance.delete("/auth/logout"); 
       set({ authUser: null });
-      // localStorage.removeItem("token"); // ✅ remove token
       toast.success("Logged out successfully");
     } catch (error) {
-      console.log("Error logging out", error);
       toast.error("Error logging out");
     }
   },
