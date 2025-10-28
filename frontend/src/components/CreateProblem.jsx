@@ -7,6 +7,149 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BookOpen,Lightbulb } from "lucide-react";
 
+const sampleTwoSumData = {
+  title: "Two Sum",
+  description:
+    "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.",
+  difficulty: "EASY",
+  tags: ["Array", "Hash Table"],
+  constraints: "2 <= nums.length <= 10^4\n-10^9 <= nums[i] <= 10^9\n-10^9 <= target <= 10^9",
+  hints:
+    "Use a hash map to store numbers you have seen and their indices as you iterate through the array.",
+  editorial:
+    "Iterate through the array while keeping a hash map of seen numbers. For each element, check if target - nums[i] exists in the map; if yes, return their indices.",
+  testcases: [
+    {
+      input: "4\n2 7 11 15\n9",
+      output: "[0,1]",
+    },
+    {
+      input: "3\n3 2 4\n6",
+      output: "[1,2]",
+    },
+    {
+      input: "2\n3 3\n6",
+      output: "[0,1]",
+    },
+  ],
+  examples: {
+    JAVASCRIPT: {
+      input: "nums = [2,7,11,15], target = 9",
+      output: "[0,1]",
+      explanation: "Because nums[0] + nums[1] == 9, we return [0, 1].",
+    },
+    PYTHON: {
+      input: "nums = [3,2,4], target = 6",
+      output: "[1,2]",
+      explanation: "Because nums[1] + nums[2] == 6, we return [1, 2].",
+    },
+    JAVA: {
+      input: "nums = [3,3], target = 6",
+      output: "[0,1]",
+      explanation: "Because nums[0] + nums[1] == 6, we return [0, 1].",
+    },
+  },
+  codeSnippets: {
+    JAVASCRIPT: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+  // Write your solution here
+}
+
+// ---- Piston-friendly stdin parsing ----
+const fs = require('fs');
+const raw = fs.readFileSync(0, 'utf8').trim();
+
+// Handle various formats: 3 lines or space-separated
+const tokens = raw
+  .replace(/[\\[\\],]/g, ' ')
+  .split(/\\s+/)
+  .filter(Boolean);
+
+if (tokens.length < 3) {
+  console.error('Invalid input');
+  process.exit(1);
+}
+
+// First token = n, next n = nums, last = target
+const n = parseInt(tokens[0], 10);
+const nums = tokens.slice(1, 1 + n).map(Number);
+const target = parseInt(tokens[1 + n], 10);
+
+const result = twoSum(nums, target);
+process.stdout.write(JSON.stringify(result));`,
+
+    PYTHON: `class Solution:
+  def twoSum(self, nums, target):
+      # Write your solution here
+
+# Input parsing
+if __name__ == "__main__":
+  import sys
+  data = sys.stdin.read().strip().split()
+  n = int(data[0])
+  nums = list(map(int, data[1:1+n]))
+  target = int(data[1+n])
+  sol = Solution()
+  print(sol.twoSum(nums, target))`,
+
+    JAVA: `import java.util.*;
+
+class Main {
+  public int[] twoSum(int[] nums, int target) {
+      // Write your solution here
+  }
+
+  public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      int n = Integer.parseInt(sc.nextLine().trim());
+      int[] nums = Arrays.stream(sc.nextLine().trim().split(" "))
+                         .mapToInt(Integer::parseInt)
+                         .toArray();
+      int target = Integer.parseInt(sc.nextLine().trim());
+      Main main = new Main();
+      int[] result = main.twoSum(nums, target);
+      System.out.println(Arrays.toString(result));
+      sc.close();
+  }
+}` },
+  referenceSolutions: {
+    JAVASCRIPT: `function twoSum(nums, target) {
+  const map = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    if (map.has(need)) return [map.get(need), i];
+    map.set(nums[i], i);
+  }
+}`,
+    PYTHON: `class Solution:
+  def twoSum(self, nums, target):
+      hashmap = {}
+      for i, num in enumerate(nums):
+          diff = target - num
+          if diff in hashmap:
+              return [hashmap[diff], i]
+          hashmap[num] = i`,
+    JAVA: `import java.util.*;
+
+class Main {
+  public int[] twoSum(int[] nums, int target) {
+      Map<Integer, Integer> map = new HashMap<>();
+      for (int i = 0; i < nums.length; i++) {
+          int complement = target - nums[i];
+          if (map.containsKey(complement)) {
+              return new int[]{map.get(complement), i};
+          }
+          map.put(nums[i], i);
+      }
+      return new int[]{};
+  }
+}` },
+};
+
 const sampledpData = {
     title: "Climbing Stairs",
     description:
@@ -708,14 +851,12 @@ const CreateProblemForm = () => {
     
     const loadSampleData = useCallback(() => {
         const sampleData =
-            sampleType === "DP" ? sampledpData : sampleStringProblem;
+            sampleType === "DP" ? sampledpData : sampleType === "string" ? sampleStringProblem : sampleTwoSumData;
 
         setFormData({
             ...sampleData,
-            tags: sampleData.tags,
-            testCases: sampleData.testcases, 
         });
-        setErrors({}); 
+        setErrors({});
     }, [sampleType]);
 
 
@@ -733,6 +874,15 @@ const CreateProblemForm = () => {
 
                         <div className="flex flex-col md:flex-row gap-3 mt-4 md:mt-0">
                             <div className="join">
+                                <button
+                                    type="button"
+                                    className={`btn join-item ${
+                                        sampleType === "two-sum" ? "btn-active btn-primary" : "btn-outline"
+                                    }`}
+                                    onClick={() => setSampleType("two-sum")}
+                                >
+                                    Two Sum
+                                </button>
                                 <button
                                     type="button"
                                     className={`btn join-item ${

@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import useProblemStore from '../store/problemStore';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, Play, Send, X } from "lucide-react";
+import { ArrowDown, ChevronLeft, Play, Send, X } from "lucide-react";
 import Editor from '@monaco-editor/react';
 import {languageMap,languageId} from '../utils/constants.js'
 import useExecuteCode from '../store/codeExecuteStore.js';
@@ -158,17 +158,19 @@ const ProblemPage = () => {
 
           {/* LANGUAGE Dropdown */}
           <div className="flex flex-row items-center justify-center gap-0 bg-gray-700 rounded-md px-4 py-2">
-            <select 
-              className=" text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <select
+              id="lang-select"
+              className=" text-white  appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
             >
               {languages.map((item) => (
-                <option key={item} value={item}>{item}</option>
+                <option className='bg-gray-800 text-white' key={item} value={item}>{item}</option>
               ))}
+
             </select>
-            <div className="pointer-events-none inset-y-0 right-0 items-center text-gray-400 pl-2">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            <div className="pointer-events-auto cursor-pointer inset-y-0 right-0 items-center text-gray-400 pl-2" onClick={() => document.getElementById('lang-select').focus()}>
+              <ArrowDown className='w-4 h-4' />
             </div>
           </div>
         </div>
